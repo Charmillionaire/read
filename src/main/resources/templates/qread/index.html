@@ -1,95 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="/">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
+  <meta name="description" content="轻阅读 - 您的私人阅读空间">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="read">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="轻阅读">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>read</title>
-  <!-- Loading indicator -->
+  <title>轻阅读</title>
+  <link rel="stylesheet" href="/static/css/glassmorphism.css">
   <style>
-    .container{
-      width: 100vw;
-      height: 100vh;
+    .loading-wrapper {
+      min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
-      flex: auto;
-      flex-direction: column;
+      justify-content: center;
+      background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 50%, #f3e5f5 100%);
+      position: relative;
+      overflow: hidden;
     }
-    .indicator{
-      width: 100px;
-      height: 100px;
-      margin-bottom: 15px;
+
+    /* 动态背景 */
+    .loading-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(24, 160, 88, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(54, 173, 106, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 40% 60%, rgba(99, 226, 183, 0.1) 0%, transparent 40%);
+      animation: float 20s ease-in-out infinite;
     }
-    .progress-bar {
-      width: 100px;
-      background-color: #f3f3f3;
-      border-radius: 4px;
+
+    .loading-card {
+      text-align: center;
+      padding: 48px 40px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      z-index: 1;
+      animation: scaleIn 0.6s ease forwards;
     }
-    @keyframes progress {
-      0% { width: 50%; }
+
+    .loading-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: var(--primary-gradient);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(24, 160, 88, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .loading-logo svg {
+      width: 48px;
+      height: 48px;
+      fill: white;
+    }
+
+    .loading-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1f2225;
+      margin-bottom: 8px;
+    }
+
+    .loading-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 32px;
+    }
+
+    .loading-bar-wrapper {
+      width: 200px;
+      margin: 0 auto;
+    }
+
+    .loading-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .loading-bar-fill {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 3px;
+      animation: loading 2s ease-in-out forwards;
+    }
+
+    @keyframes loading {
+      0% { width: 0%; }
+      50% { width: 60%; }
       100% { width: 100%; }
     }
-    .progress-bar-fill {
-      display: block;
-      height: 5px;
-      background-color: #46494b;
-      border-radius: 4px;
-      transition: width 0.2s ease-in;
-      animation: progress 5s ease-in-out forwards;
+
+    .loading-text {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #9ca3af;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* 装饰元素 */
+    .decoration {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .decoration-1 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(24, 160, 88, 0.12) 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .decoration-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(54, 173, 106, 0.08) 0%, transparent 70%);
+      bottom: -150px;
+      left: -150px;
+      animation: float 20s ease-in-out infinite reverse;
     }
   </style>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-<div id="loading_indicator" class="container">
-  <img class="indicator" src="/icons/app_icon.png"/>
-  <div class="progress-bar">
-    <div class="progress-bar-fill" style="width: 50%;"></div>
+  <div class="loading-wrapper" id="loading_indicator">
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    
+    <div class="loading-card">
+      <div class="loading-logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <h1 class="loading-title">轻阅读</h1>
+      <p class="loading-subtitle">正在加载应用...</p>
+      <div class="loading-bar-wrapper">
+        <div class="loading-bar">
+          <div class="loading-bar-fill"></div>
+        </div>
+      </div>
+      <p class="loading-text">请稍候</p>
+    </div>
   </div>
-</div>
-<script>
-  window.addEventListener('load', function(ev) {
-    var loading = document.getElementById('loading_indicator');
-    _flutter.loader.loadEntrypoint({
-      serviceWorker: {
-        serviceWorkerVersion: serviceWorkerVersion,
-      },
-      onEntrypointLoaded: async function(engineInitializer) {
-        let appRunner = await engineInitializer.initializeEngine();
-        await appRunner.runApp();
-        window.setTimeout(function () {
-          loading.remove();
-        }, 200);
-      }
+
+  <script>
+    window.addEventListener('load', function(ev) {
+      var loading = document.getElementById('loading_indicator');
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: async function(engineInitializer) {
+          let appRunner = await engineInitializer.initializeEngine();
+          await appRunner.runApp();
+          window.setTimeout(function () {
+            loading.style.transition = 'opacity 0.5s ease';
+            loading.style.opacity = '0';
+            setTimeout(function() {
+              loading.remove();
+            }, 500);
+          }, 300);
+        }
+      });
     });
-  });
-</script>
-<script src="flutter_bootstrap.js" async></script>
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

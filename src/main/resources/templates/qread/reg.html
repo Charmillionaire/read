@@ -2,299 +2,245 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>注册 - 轻阅读</title>
+    <link rel="stylesheet" href="/static/css/glassmorphism.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .auth-wrapper {
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            color: #333;
             padding: 20px;
-            line-height: 1.6;
         }
-        
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 50px 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
-            max-width: 480px;
+
+        .auth-card {
             width: 100%;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            max-width: 460px;
+            padding: 48px 40px;
+            animation: fadeInUp 0.6s ease forwards;
         }
-        
-        .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 36px;
         }
-        
-        h1 {
-            font-size: 32px;
+
+        .auth-logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: var(--primary-gradient);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(24, 160, 88, 0.3);
+        }
+
+        .auth-logo svg {
+            width: 36px;
+            height: 36px;
+            fill: white;
+        }
+
+        .auth-title {
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subtitle {
-            font-size: 16px;
-            color: #7f8c8d;
-            margin-bottom: 35px;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-        
-        label {
-            display: block;
+            color: var(--text-primary);
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        
+
+        .auth-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
         .input-group {
             display: flex;
             gap: 12px;
             align-items: center;
-            width: 100%;
         }
-        
-        input {
+
+        .input-group .glass-input {
             flex: 1;
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 16px;
-            border: 2px solid #e0e6ed;
-            border-radius: 12px;
-            background-color: #fafbfc;
-            transition: all 0.3s ease;
-            color: #333;
         }
-        
-        /* 确保普通输入框（不在input-group内）也占满宽度 */
-        .form-group:not(:has(.input-group)) input {
-            width: 100%;
+
+        .glass-btn-send {
+            white-space: nowrap;
+            min-width: 120px;
+            padding: 14px 20px;
         }
-        
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-            transform: translateY(-1px);
-        }
-        
-        button {
-            padding: 15px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        #send-code-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-width: 130px;
-            z-index: 1;
-        }
-        
-        #send-code-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        #send-code-btn:disabled {
-            background: #d1d5db;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        #register-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            width: 100%;
-            margin-top: 15px;
-            z-index: 1;
-        }
-        
-        #register-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
-        }
-        
-        #register-btn:disabled {
-            background: #d1d5db;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
+
         .error-message {
             color: #e74c3c;
             font-size: 13px;
             margin-top: 6px;
             display: none;
-            font-weight: 500;
         }
-        
+
         .success-message {
             color: #2ecc71;
             font-size: 13px;
             margin-top: 6px;
             display: none;
-            font-weight: 500;
         }
-        
+
         .countdown {
             font-size: 13px;
-            color: #667eea;
+            color: var(--primary-color);
             margin-top: 6px;
             font-weight: 600;
+            display: none;
         }
-        
-        .back-link {
-            margin-top: 25px;
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 24px;
             font-size: 14px;
+            color: var(--text-muted);
         }
-        
-        .back-link a {
-            color: #667eea;
+
+        .auth-footer a {
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
         }
-        
-        .back-link a:hover {
+
+        .auth-footer a:hover {
             text-decoration: underline;
-            color: #764ba2;
         }
-        
-        /* 添加一些装饰元素 */
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
-            border-radius: 25px;
+
+        /* 装饰元素 */
+        .decoration {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
             z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
-        
-        .container:hover::before {
-            opacity: 0.1;
+
+        .decoration-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(24, 160, 88, 0.15) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .decoration-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(54, 173, 106, 0.1) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation: float 20s ease-in-out infinite reverse;
+        }
+
+        @media screen and (max-width: 768px) {
+            .auth-card {
+                padding: 36px 24px;
+            }
+
+            .auth-title {
+                font-size: 24px;
+            }
+
+            .glass-btn-send {
+                min-width: 100px;
+                padding: 14px 16px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>注册账号</h1>
-        <p class="subtitle">创建您的轻阅读账号，开启阅读之旅</p>
-        <form id="register-form">
-            <div class="form-group">
-                <label for="username">用户名</label>
-                <input type="text" id="username" name="username" placeholder="请输入用户名" required>
-                <div id="username-error" class="error-message"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">邮箱</label>
-                <div class="input-group">
-                    <input type="email" id="email" name="email" placeholder="请输入邮箱" required>
-                    <button type="button" id="send-code-btn">发送验证码</button>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+
+    <div class="auth-wrapper">
+        <div class="auth-card glass-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
                 </div>
-                <div id="email-error" class="error-message"></div>
-                <div id="countdown" class="countdown"></div>
+                <h1 class="auth-title">注册账号</h1>
+                <p class="auth-subtitle">创建您的轻阅读账号，开启阅读之旅</p>
             </div>
-            
-            <div class="form-group">
-                <label for="code">验证码</label>
-                <input type="text" id="code" name="code" placeholder="请输入验证码" required>
-                <div id="code-error" class="error-message"></div>
+
+            <form class="auth-form" id="register-form">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" class="glass-input" placeholder="请输入用户名（3-20个字符）" required>
+                    <div id="username-error" class="error-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <div class="input-group">
+                        <input type="email" id="email" name="email" class="glass-input" placeholder="请输入邮箱" required>
+                        <button type="button" id="send-code-btn" class="glass-btn glass-btn-send">发送验证码</button>
+                    </div>
+                    <div id="email-error" class="error-message"></div>
+                    <div id="countdown" class="countdown"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="code">验证码</label>
+                    <input type="text" id="code" name="code" class="glass-input" placeholder="请输入验证码" required>
+                    <div id="code-error" class="error-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" class="glass-input" placeholder="请输入密码（至少6个字符）" required>
+                    <div id="password-error" class="error-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">确认密码</label>
+                    <input type="password" id="confirm-password" name="confirm-password" class="glass-input" placeholder="请再次输入密码" required>
+                    <div id="confirm-password-error" class="error-message"></div>
+                </div>
+                
+                <button type="submit" id="register-btn" class="glass-btn glass-btn-block">注册</button>
+            </form>
+
+            <div class="auth-footer">
+                已有账号？ <a href="/">立即登录</a>
             </div>
-            
-            <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" id="password" name="password" placeholder="请输入密码" required>
-                <div id="password-error" class="error-message"></div>
-            </div>
-            
-            <div class="form-group">
-                <label for="confirm-password">确认密码</label>
-                <input type="password" id="confirm-password" name="confirm-password" placeholder="请再次输入密码" required>
-                <div id="confirm-password-error" class="error-message"></div>
-            </div>
-            
-            <div class="form-group">
-                <button type="submit" id="register-btn">注册</button>
-            </div>
-        </form>
-        
-        <div class="back-link">
-            <a href="/">返回首页</a>
         </div>
     </div>
 
     <script>
-        // 倒计时功能
         let countdownTimer = null;
         let countdownSeconds = 60;
         
-        // 发送验证码按钮点击事件
         document.getElementById('send-code-btn').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const emailError = document.getElementById('email-error');
             const sendCodeBtn = document.getElementById('send-code-btn');
             
-            // 验证邮箱格式
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 emailError.textContent = '请输入有效的邮箱地址';
@@ -303,75 +249,68 @@
             }
             
             emailError.style.display = 'none';
+            sendCodeBtn.disabled = true;
+            sendCodeBtn.textContent = '发送中...';
             
             try {
-                // 调用发送验证码接口
                 const response = await fetch('/sendResetCode', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
                 });
                 
                 const result = await response.json();
                 if (result.isSuccess) {
-                    // 开始倒计时
                     startCountdown();
                 } else {
                     emailError.textContent = result.errorMsg || '发送验证码失败';
                     emailError.style.display = 'block';
+                    sendCodeBtn.disabled = false;
+                    sendCodeBtn.textContent = '发送验证码';
                 }
             } catch (error) {
                 emailError.textContent = '网络错误，请稍后重试';
                 emailError.style.display = 'block';
+                sendCodeBtn.disabled = false;
+                sendCodeBtn.textContent = '发送验证码';
             }
         });
         
-        // 开始倒计时
         function startCountdown() {
             const sendCodeBtn = document.getElementById('send-code-btn');
             const countdownDiv = document.getElementById('countdown');
             
-            // 禁用发送按钮
             sendCodeBtn.disabled = true;
+            sendCodeBtn.textContent = '已发送';
             
-            // 显示倒计时
             countdownSeconds = 60;
             countdownDiv.textContent = "验证码已发送，" + countdownSeconds + "秒后可重新发送";
             countdownDiv.style.display = 'block';
             
-            // 清除之前的计时器
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-            }
+            if (countdownTimer) clearInterval(countdownTimer);
             
-            // 设置新的计时器
             countdownTimer = setInterval(() => {
                 countdownSeconds--;
                 countdownDiv.textContent = "验证码已发送，" + countdownSeconds + "秒后可重新发送";
                 
                 if (countdownSeconds <= 0) {
-                    // 倒计时结束，恢复按钮状态
                     clearInterval(countdownTimer);
                     sendCodeBtn.disabled = false;
+                    sendCodeBtn.textContent = '发送验证码';
                     countdownDiv.style.display = 'none';
                 }
             }, 1000);
         }
         
-        // 表单提交事件
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // 获取表单数据
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const code = document.getElementById('code').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             
-            // 验证表单
             let isValid = true;
             
             // 验证用户名
@@ -425,28 +364,23 @@
                 confirmPasswordError.style.display = 'none';
             }
             
-            if (!isValid) {
-                return;
-            }
+            if (!isValid) return;
             
             const registerBtn = document.getElementById('register-btn');
             registerBtn.disabled = true;
             registerBtn.textContent = '注册中...';
             
             try {
-                // 调用注册接口
                 const response = await fetch('/regester', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, code, password })
                 });
                 
                 const result = await response.json();
                 if (result.isSuccess) {
                     alert('注册成功，请登录');
-                    window.location.href = '/'; // 注册成功后跳转到首页
+                    window.location.href = '/';
                 } else {
                     alert(result.errorMsg || '注册失败');
                 }
