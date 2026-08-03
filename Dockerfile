@@ -10,10 +10,9 @@ RUN chmod +x gradlew && ./gradlew build -x test --no-daemon
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
+# jar 与依赖 libs/ 同级(Class-Path 相对引用 libs/xxx.jar)
 COPY --from=builder /app/build/libs/*.jar /app/read.jar
-# 复制运行依赖目录(libs)与 Class-Path 匹配; 也复制静态资源/配置
-COPY --from=builder /app/build/libs/libs /app/libs 2>/dev/null || true
-COPY --from=builder /app/libs /app/libs 2>/dev/null || true
+COPY --from=builder /app/libs /app/libs
 COPY --from=builder /app/src/main/resources /app/resources
 
 # 暴露端口
