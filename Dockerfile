@@ -16,6 +16,8 @@ COPY --from=builder /app/build/libs/*.jar /app/
 COPY --from=builder /app/libs /app/libs
 # 配置文件(Solon 从 ./conf.yml 读取 admin/数据库等配置)
 COPY conf/conf.yml /app/conf.yml
+# 数据库持久化: 把 sqlite db 改到 /app/storage/ (可由外部卷挂载持久化), 避免重启丢数据
+RUN sed -i 's|jdbc:sqlite:[^\"]*|jdbc:sqlite:/app/storage/read.db|' /app/conf.yml && echo '=== 最终 conf.yml db 路径 ===' && grep 'jdbcUrl' /app/conf.yml
 # 静态资源 (web前端/图片等)
 COPY --from=builder /app/src/main/resources /app/resources
 COPY png /app/png
