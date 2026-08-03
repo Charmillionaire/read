@@ -5,6 +5,8 @@ FROM gradle:8.10-jdk21 AS builder
 WORKDIR /app
 COPY . .
 RUN chmod +x gradlew && ./gradlew build -x test --no-daemon
+# 调试: 确认 jar/依赖产物位置
+RUN echo '=== find jars ===' && find /app -name '*.jar' | grep -v '/libs/' | head -20 && echo '=== build/libs ===' && ls -la /app/build/libs/ 2>&1 | head -20 && echo '=== root libs ===' && ls /app/libs/ 2>&1 | head -5
 
 # Runtime image
 FROM eclipse-temurin:21-jre-alpine
