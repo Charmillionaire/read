@@ -11,18 +11,16 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 # jar 与依赖 libs/ 同级(Class-Path 相对引用 libs/xxx.jar)
-COPY --from=builder /app/build/libs/*.jar /app/read.jar
+COPY --from=builder /app/build/libs/*.jar /app/
 COPY --from=builder /app/libs /app/libs
 COPY --from=builder /app/src/main/resources /app/resources
 
 # 暴露端口
 EXPOSE 8080
 
-# 数据/静态目录
 RUN mkdir -p /app/storage/assets
-
 ENV SERVER_PORT=8080
 VOLUME ["/app/storage"]
 
-# 运行: java -jar 依赖 Class-Path(libs/)
-ENTRYPOINT ["java", "-jar", "/app/read.jar"]
+# 用 shell 通配符匹配 build/libs 下的具体 jar(避免固定名/多jar导致 /app/read.jar 变成目录的问题)
+ENTRYPOINT ["sh", "-c", "java -jar /app/*.jar"]
